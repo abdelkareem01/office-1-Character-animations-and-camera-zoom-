@@ -5,47 +5,80 @@ using TMPro;
 
 public class ChairCont : MonoBehaviour
 {
-    public TextMeshProUGUI text;
-
-    public Animator anim;
-
-    [HideInInspector]
-    public Vector3 chairCoords;
+    [SerializeField]
+    private TextMeshProUGUI text;
     
-    [HideInInspector]
-    public Vector3 chairRot;
+    [SerializeField]
+    private Animator playerAnim;
 
-    void start() {
+    [SerializeField]
+    private GameObject player;
     
-    chairCoords = transform.position;
-    chairRot = transform.eulerAngles;
+    private Animator chairAnim;
+    private bool canSit = false;
+    [SerializeField]
+    private FirstPersonAIO fps;
 
+    [SerializeField]
+    private Animator CameraAnim;
+
+    [SerializeField]
+    private Camera camera;
+    void Awake() {
+       
     }
 
     private void OnTriggerEnter(Collider other) {
         if(other.tag.Equals("Player")){
         text.text = "Press E to sit";
         
-        }
-
-        if(Input.GetKey(KeyCode.E)){
-                        
-            anim.SetBool("Sitting", true);
-        }
-
-        if(Input.GetKey(KeyCode.R)){
-            anim.SetBool("Sitting", false);
+        canSit = true;
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if(other.tag.Equals("Player")){
             text.text = "";
+         
+         canSit = false;    
         }
     }
 
-    void Update()
-    {
-       
+    void Update() {
+        
+        float y = player.transform.rotation.eulerAngles.y;
+      
+        
+        if(Input.GetKeyDown(KeyCode.E) && canSit){
+            chairAnim = GetComponent<Animator>();
+            camera.transform.rotation = Quaternion.Euler(85,0,0);            
+            fps.enableCameraMovement = false;
+            fps.playerCanMove = false;
+            fps.canZoom = true;
+            playerAnim.SetBool("Sitting", true);
+            chairAnim.SetTrigger("Move");
+            CameraAnim.SetBool("Move", true);
+            CameraAnim.SetBool("Return", false);
+            player.transform.position = this.transform.position + new Vector3(0,-0.2f,0);
+            player.transform.rotation = Quaternion.Euler(0, y, 0);
+            canSit = false;
+            Debug.Log(y);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Mouse1)){
+           fps.enableCameraMovement = true;     
+        }
+
+
+        if(Input.GetKeyDown(KeyCode.R) && !canSit){
+            fps.enableCameraMovement = false;
+            chairAnim = GetComponent<Animator>();
+            CameraAnim.SetBool("Move", false);
+            playerAnim.SetBool("Sitting", false);
+            CameraAnim.SetBool("Return", true);
+            chairAnim.SetTrigger("Move");
+            player.transform.rotation = Quaternion.Euler(0, y, 0);
+        }
     }
+
 }

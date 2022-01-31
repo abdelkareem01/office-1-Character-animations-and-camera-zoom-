@@ -85,6 +85,7 @@ public class FirstPersonAIO : MonoBehaviour {
 
     public Animator anim;
 
+    public bool canZoom = false;
     public float verticalRotationRange = 170;
     public float mouseSensitivity = 10;
     public  float   fOVToMouseSensitivity = 1;
@@ -1560,7 +1561,6 @@ public class FirstPersonAIO : MonoBehaviour {
             GUILayout.Label("Audio/SFX Setup",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-
         #endregion 
         
         */
