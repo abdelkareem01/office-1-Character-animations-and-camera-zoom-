@@ -23,11 +23,13 @@ public class CameraCont : MonoBehaviour
         if(Input.GetMouseButtonUp(1)){
             anim.SetBool("Zoom", false);
         }
+
     }
 
     public void setMovement(){
         fps.playerCanMove = true;
         fps.enableCameraMovement = true;
     }
+
 
 }
